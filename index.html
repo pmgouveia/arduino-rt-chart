@@ -1,0 +1,104 @@
+<!-- http://socket.io/get-started/chat/ -->
+<!doctype html>
+<html>
+<head>
+<title>charts...</title>
+
+<script src="/jquery.min.js"></script>
+
+
+<script src="/Chart.min.js"></script>
+
+</head>
+<body>
+<!-- line chart canvas element -->
+<canvas id="chart0" width="600" height="400"></canvas>
+<canvas id="chart1" width="600" height="400"></canvas>
+<canvas id="chart2" width="600" height="400"></canvas>
+<canvas id="chart3" width="600" height="400"></canvas>
+
+</body>
+
+
+<script type="text/javascript">
+
+
+$.get( "moduloexp2.dat", function( dados ) {
+		console.log( "Data Loaded: " + dados );
+		
+		var allTextLines = dados.split('\n');
+		var headers = allTextLines[0].split(';');
+		var lines = [];
+		var dadosOrganizados = [];
+		
+		for (var i = 1; i < allTextLines.length; i++) {
+			var data = allTextLines[i].split(';');
+			if (data.length == 5) {
+			
+			var tarr = [];
+			for (var j = 0; j < data.length; j++) {
+				var inteiro = parseInt(data[j]);
+				// console.log(data[j],"=",inteiro);
+				if(typeof inteiro !== "number" || isNaN(inteiro)){
+					tarr.push(0);
+				}else{
+					tarr.push(inteiro);
+				}
+			}
+			lines.push(tarr);
+			
+			}
+		}
+		
+		// console.log("linhas....",lines);
+		lines = transpose(lines);
+		console.log(lines[1],"....depois");
+		
+		
+		for (var i = 0; i < 4; i++) {
+		// var i  = 0;
+		// var line = lines[0];
+			var labels = [];
+			for(var jk = 1 ; jk < lines[0].length ; jk++){
+				labels.push(jk);
+			}
+			// labels = 
+			// lines[0]
+			
+			var canvas = document.getElementById('chart'+i),
+			ctx = canvas.getContext('2d'),
+			startData = {
+				labels: labels,
+				datasets: [
+					{
+						fillColor: "rgba(151,187,205,0.2)",
+						strokeColor: "rgba(151,187,205,1)",
+						pointColor: "rgba(151,187,205,1)",
+						pointStrokeColor: "#fff",
+						data: lines[i],
+					}
+				]
+			};
+			
+			// startingData.datasets[0].data = data;
+			// Reduce the animation steps for demo clarity.
+			var myLiveChart = new Chart(ctx).Line(startData, {animationSteps: 15});
+		}
+		
+		
+});
+
+function transpose(a) {
+	return Object.keys(a[0]).map(function (c) {
+			return a.map(function (r) {
+					return r[c];
+			});
+	});
+}
+
+</script>
+
+<script>
+
+</script>
+</html>
