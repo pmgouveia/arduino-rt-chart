@@ -22,7 +22,211 @@
 
 <script type="text/javascript">
 
+$(document).ready(function(){
+		
+		var filename = "example.dat";
+		var windowSize = 20;
+		
+		var modules =  [
+			{
+				col: 1,
+				size: 10,
+				fillColor: "rgba(151,187,205,0.2)",
+				strokeColor: "rgba(151,187,205,1)",
+				pointColor: "rgba(151,187,205,1)",
+				pointStrokeColor: "#fff",
+				
+			},
+			{
+				col: 2,
+				size: 10,
+				fillColor: "rgba(151,187,205,0.2)",
+				strokeColor: "rgba(151,187,205,1)",
+				pointColor: "rgba(151,187,205,1)",
+				pointStrokeColor: "#fff",
+				
+			},
+			
+			{
+				col: 3,
+				size: 10,
+				fillColor: "rgba(151,187,205,0.2)",
+				strokeColor: "rgba(151,187,205,1)",
+				pointColor: "rgba(151,187,205,1)",
+				pointStrokeColor: "#fff",
+				
+			},
+			{
+				col: 4,
+				size: 10,
+				fillColor: "rgba(151,187,205,0.2)",
+				strokeColor: "rgba(151,187,205,1)",
+				pointColor: "rgba(151,187,205,1)",
+				pointStrokeColor: "#fff",
+				
+			},
+		];
+		// console.log(">",modules);
+		/*
+		for (var moduleIdx = 0; moduleIdx < modules.length; moduleIdx++) {
+			console.log(moduleIdx);
+			$.get( modules[moduleIdx].filedata,{moduleIdx: moduleIdx}).done(function( filedata ) {
+					files.push({data: filedata,filename: }
+			});
+			
+			
+		}*/
 
+//readmodule(filedata,moduleIdx);
+
+function readmodule(filedata,moduleIdx){
+console.log('loading module: '+moduleIdx);
+					console.log( "Data Loaded: " + filedata );
+					
+					var allTextLines = filedata.split('\n');
+					var labels = [];
+					var lines = [];
+					var dadosOrganizados = [];
+					
+					for (var i = 1; i < allTextLines.length; i++) {
+						var data = allTextLines[i].split(';');
+						// if (data.length == 5) {
+						
+						var tarr = [];
+						for (var j = 1; j < 10; j++) {
+							var inteiro = parseInt(data[j]);
+							
+							if(typeof inteiro !== "number" || isNaN(inteiro) || typeof inteiro === "undefined"){
+								tarr.push(0);
+							}else{
+								console.log(typeof inteiro);
+								tarr.push(inteiro);
+							}
+						}
+						lines.push(tarr);
+						
+						// }
+					}
+					
+					for (var i = 1; i < allTextLines.length; i++) {
+						var data = allTextLines[i].split(';');
+						labels.push(data[0]);
+					}
+					sensors = transpose(lines);
+					
+					
+					console.log('module...: ');
+					console.log(moduleIdx);
+					// console.log('buuu');
+					
+					console.log(modules[moduleIdx]);
+					var canvas = document.getElementById('chart'+moduleIdx),
+					ctx = canvas.getContext('2d'),
+					startData = {
+						labels: labels,
+						datasets: [
+							{
+								fillColor: modules[moduleIdx].fillColor,
+								strokeColor: modules[moduleIdx].strokeColor,
+								pointColor: modules[moduleIdx].pointColor,
+								pointStrokeColor: modules[moduleIdx].pointStrokeColor,
+								data: sensors[modules[moduleIdx].col],
+							}
+						]
+					};
+					console.log(startData);
+					
+					console.log('creating canvas...');
+					var myLiveChart = new Chart(ctx).Line(startData);
+					console.log('canvas created...');
+					
+}
+
+$.get(filename, function( dados ) {
+		console.log( "Data Loaded: " + dados );
+		
+		var allTextLines = dados.split('\n');
+		var labels = [];
+		var lines = [];
+		var dadosOrganizados = [];
+		
+		for (var i = allTextLines.length-windowSize; i < allTextLines.length; i++) {
+			var data = allTextLines[i].split(';');
+			// if (data.length == 5) {
+			
+			var tarr = [];
+			for (var j = 1; j < 10; j++) {
+				var inteiro = parseInt(data[j]);
+				
+				if(typeof inteiro !== "number" || isNaN(inteiro) || typeof inteiro === "undefined"){
+					tarr.push(0);
+				}else{
+					console.log(typeof inteiro);
+					tarr.push(inteiro);
+				}
+			}
+			lines.push(tarr);
+			
+			// }
+		}
+		
+		for (var i = allTextLines.length-windowSize; i < allTextLines.length; i++) {
+			var data = allTextLines[i].split(';');
+			labels.push(data[0]);
+		}
+		sensors = transpose(lines);
+		
+		for(var moduleIdx = 0; moduleIdx < modules.length; moduleIdx++){
+			console.log(modules[moduleIdx]);
+			var canvas = document.getElementById('chart'+moduleIdx),
+			ctx = canvas.getContext('2d'),
+			startData = {
+				labels: labels,
+				datasets: [
+					{
+						fillColor: modules[moduleIdx].fillColor,
+						strokeColor: modules[moduleIdx].strokeColor,
+						pointColor: modules[moduleIdx].pointColor,
+						pointStrokeColor: modules[moduleIdx].pointStrokeColor,
+						data: sensors[modules[moduleIdx].col],
+					}
+				]
+			};
+			console.log(startData);
+			
+			console.log('creating canvas...');
+			var myLiveChart = new Chart(ctx).Line(startData);
+			console.log('canvas created...');
+		}
+		
+		/*
+		for (var i = 0; i < 4; i++) {
+			console.log(i,lines[i]);
+			var canvas = document.getElementById('chart'+i),
+			ctx = canvas.getContext('2d'),
+			startData = {
+				labels: labels,
+				datasets: [
+					{
+						fillColor: "rgba(151,187,205,0.2)",
+						strokeColor: "rgba(151,187,205,1)",
+						pointColor: "rgba(151,187,205,1)",
+						pointStrokeColor: "#fff",
+						data: lines[i],
+					}
+				]
+			};
+			
+			// startingData.datasets[0].data = data;
+			// Reduce the animation steps for demo clarity.
+			var myLiveChart = new Chart(ctx).Line(startData, {animationSteps: 15});
+		}
+		*/
+		
+});
+
+});
+/*
 $.get( "example.dat", function( dados ) {
 		console.log( "Data Loaded: " + dados );
 		
@@ -31,34 +235,37 @@ $.get( "example.dat", function( dados ) {
 		var lines = [];
 		var dadosOrganizados = [];
 		
-		for (var i = 0; i < allTextLines.length; i++) {
+		for (var i = 1; i < allTextLines.length; i++) {
 			var data = allTextLines[i].split(';');
-			if (data.length == 5) {
+			// if (data.length == 5) {
 			
 			var tarr = [];
-			for (var j = 1; j < data.length; j++) {
+			for (var j = 1; j < 10; j++) {
 				var inteiro = parseInt(data[j]);
 				
-				if(typeof inteiro !== "number" || isNaN(inteiro)){
+				if(typeof inteiro !== "number" || isNaN(inteiro) || typeof inteiro === "undefined"){
 					tarr.push(0);
 				}else{
+					console.log(typeof inteiro);
 					tarr.push(inteiro);
 				}
 			}
 			lines.push(tarr);
 			
-			}
+			// }
 		}
 		
-		for (var i = 0; i < allTextLines.length; i++) {
+		for (var i = 1; i < allTextLines.length; i++) {
 			var data = allTextLines[i].split(';');
 			labels.push(data[0]);
 		}
-		lines = transpose(lines);
+		sensors = transpose(lines);
+		
+		
 		
 		
 		for (var i = 0; i < 4; i++) {
-		
+			console.log(i,lines[i]);
 			var canvas = document.getElementById('chart'+i),
 			ctx = canvas.getContext('2d'),
 			startData = {
@@ -81,7 +288,7 @@ $.get( "example.dat", function( dados ) {
 		
 		
 });
-
+*/
 function transpose(a) {
 	return Object.keys(a[0]).map(function (c) {
 			return a.map(function (r) {

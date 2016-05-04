@@ -33,9 +33,9 @@ while True:
 		# fecha o ficheiro
 		ficheiroLog.close()
 		#print "adeus"
-        except Exception:
-		print "Excepcao.... "
-		pass
+	except Exception:
+        	print "Excepcao.... "
+        	pass
 		
 		
 		
