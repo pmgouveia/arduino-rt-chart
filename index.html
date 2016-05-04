@@ -23,22 +23,22 @@
 <script type="text/javascript">
 
 
-$.get( "moduloexp2.dat", function( dados ) {
+$.get( "example.dat", function( dados ) {
 		console.log( "Data Loaded: " + dados );
 		
 		var allTextLines = dados.split('\n');
-		var headers = allTextLines[0].split(';');
+		var labels = [];
 		var lines = [];
 		var dadosOrganizados = [];
 		
-		for (var i = 1; i < allTextLines.length; i++) {
+		for (var i = 0; i < allTextLines.length; i++) {
 			var data = allTextLines[i].split(';');
 			if (data.length == 5) {
 			
 			var tarr = [];
-			for (var j = 0; j < data.length; j++) {
+			for (var j = 1; j < data.length; j++) {
 				var inteiro = parseInt(data[j]);
-				// console.log(data[j],"=",inteiro);
+				
 				if(typeof inteiro !== "number" || isNaN(inteiro)){
 					tarr.push(0);
 				}else{
@@ -50,21 +50,15 @@ $.get( "moduloexp2.dat", function( dados ) {
 			}
 		}
 		
-		// console.log("linhas....",lines);
+		for (var i = 0; i < allTextLines.length; i++) {
+			var data = allTextLines[i].split(';');
+			labels.push(data[0]);
+		}
 		lines = transpose(lines);
-		console.log(lines[1],"....depois");
 		
 		
 		for (var i = 0; i < 4; i++) {
-		// var i  = 0;
-		// var line = lines[0];
-			var labels = [];
-			for(var jk = 1 ; jk < lines[0].length ; jk++){
-				labels.push(jk);
-			}
-			// labels = 
-			// lines[0]
-			
+		
 			var canvas = document.getElementById('chart'+i),
 			ctx = canvas.getContext('2d'),
 			startData = {
